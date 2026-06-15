@@ -1,91 +1,68 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+<nav class="app-navbar">
+  <div class="navbar-inner">
 
-  <a
-    class="navbar-brand"
-    routerLink="/dashboard"
-    routerLinkActive="active-link">
-    Feedback Management System
-  </a>
-
-  <div class="navbar-nav">
-
-    <a
-      class="nav-link"
-      routerLink="/dashboard"
-      routerLinkActive="active-link">
-      Dashboard
+    <a class="navbar-brand" routerLink="/dashboard" routerLinkActive="active-link">
+      <span class="brand-icon">FMS</span>
+      <span class="brand-text">Feedback Management</span>
     </a>
 
-    <a
-      class="nav-link"
-      routerLink="/courses"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN'">
-      Courses
-    </a>
+    <button class="navbar-toggle" (click)="toggleMenu()">
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+    </button>
 
-    <a
-      class="nav-link"
-      routerLink="/faculty"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN'">
-      Faculty
-    </a>
+    <div class="navbar-links" [class.open]="menuOpen">
 
-    <a
-      class="nav-link"
-      routerLink="/students"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN'">
-      Students
-    </a>
+      <a class="nav-link" routerLink="/dashboard" routerLinkActive="active-link" (click)="closeMenu()">
+        Dashboard
+      </a>
 
-    <a
-      class="nav-link"
-      routerLink="/programs"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN' || role === 'COORDINATOR'">
-      Programs
-    </a>
+      <a class="nav-link" routerLink="/courses" routerLinkActive="active-link" *ngIf="role === 'ADMIN'" (click)="closeMenu()">
+        Courses
+      </a>
 
-    <a
-      class="nav-link"
-      routerLink="/enrollments"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN' || role === 'COORDINATOR'">
-      Enrollments
-    </a>
+      <a class="nav-link" routerLink="/faculty" routerLinkActive="active-link" *ngIf="role === 'ADMIN'" (click)="closeMenu()">
+        Faculty
+      </a>
 
-    <a
-      class="nav-link"
-      routerLink="/attendance"
-      routerLinkActive="active-link"
-      *ngIf="role === 'COORDINATOR'">
-      Attendance
-    </a>
+      <a class="nav-link" routerLink="/students" routerLinkActive="active-link" *ngIf="role === 'ADMIN'" (click)="closeMenu()">
+        Students
+      </a>
 
-    <a
-      class="nav-link"
-      routerLink="/feedback"
-      routerLinkActive="active-link"
-      *ngIf="role === 'PARTICIPANT' || role === 'ADMIN'">
-      Feedback
-    </a>
+      <a class="nav-link" routerLink="/programs" routerLinkActive="active-link" *ngIf="role === 'ADMIN' || role === 'COORDINATOR'" (click)="closeMenu()">
+        Programs
+      </a>
 
-    <a
-      class="nav-link"
-      routerLink="/reports"
-      routerLinkActive="active-link"
-      *ngIf="role === 'ADMIN' || role === 'COORDINATOR'">
-      Reports
-    </a>
+      <a class="nav-link" routerLink="/enrollments" routerLinkActive="active-link" *ngIf="role === 'ADMIN' || role === 'COORDINATOR'" (click)="closeMenu()">
+        Enrollments
+      </a>
+
+      <a class="nav-link" routerLink="/attendance" routerLinkActive="active-link" *ngIf="role === 'COORDINATOR'" (click)="closeMenu()">
+        Attendance
+      </a>
+
+      <a class="nav-link" routerLink="/feedback" routerLinkActive="active-link" *ngIf="role === 'PARTICIPANT' || role === 'ADMIN'" (click)="closeMenu()">
+        Feedback
+      </a>
+
+      <a class="nav-link" routerLink="/reports" routerLinkActive="active-link" *ngIf="role === 'ADMIN' || role === 'COORDINATOR'" (click)="closeMenu()">
+        Reports
+      </a>
+
+    </div>
+
+    <div class="navbar-actions">
+      <span class="user-role">{{ role }}</span>
+      <button class="btn-logout" (click)="logout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout
+      </button>
+    </div>
 
   </div>
-
-  <button
-    class="btn btn-danger btn-sm ms-auto"
-    (click)="logout()">
-    Logout
-  </button>
-
 </nav>

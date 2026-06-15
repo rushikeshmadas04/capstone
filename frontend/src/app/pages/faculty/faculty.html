@@ -1,20 +1,21 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="message" class="alert alert-success">
-    {{ message }}
-  </div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <!-- Faculty Form -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">{{ editingFacultyId ? 'Update Faculty' : 'Add Faculty' }}</h3>
+      <button *ngIf="editingFacultyId" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+        Cancel Edit
+      </button>
+    </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>{{ editingFacultyId ? 'Update Faculty' : 'Add Faculty' }}</h4>
-
-    <div class="row">
-      <div class="col-md-5 mb-3">
+    <div class="form-row">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Faculty Name"
@@ -22,7 +23,7 @@
         />
       </div>
 
-      <div class="col-md-5 mb-3">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Faculty Email"
@@ -30,48 +31,34 @@
         />
       </div>
 
-      <div class="col-md-2 mb-3" *ngIf="!editingFacultyId">
-        <button class="btn btn-success w-100" (click)="addFaculty()">
-          Add
-        </button>
-      </div>
-
-      <div class="col-md-2 mb-3" *ngIf="editingFacultyId">
-        <button class="btn btn-warning w-100" (click)="updateFaculty()">
-          Update
-        </button>
+      <div class="form-field form-field--action">
+        <button *ngIf="!editingFacultyId" class="btn btn-primary" (click)="addFaculty()">Add</button>
+        <button *ngIf="editingFacultyId" class="btn btn-warning" (click)="updateFaculty()">Update</button>
       </div>
     </div>
-
-    <button
-      *ngIf="editingFacultyId"
-      class="btn btn-secondary btn-sm"
-      (click)="cancelEdit()">
-      Cancel Edit
-    </button>
   </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>Skill Management</h4>
+  <!-- Skill Management -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Skill Management</h3>
+    </div>
 
-    <div class="row mb-3">
-      <div class="col-md-10">
+    <div class="form-row" style="margin-bottom: var(--space-4)">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Skill Name"
           [(ngModel)]="skillName"
         />
       </div>
-
-      <div class="col-md-2">
-        <button class="btn btn-primary w-100" (click)="addSkill()">
-          Add Skill
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-primary" (click)="addSkill()">Add Skill</button>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-5">
+    <div class="form-row">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="facultyId">
           <option [ngValue]="null">Select Faculty</option>
           <option *ngFor="let faculty of faculties" [ngValue]="faculty.id">
@@ -80,7 +67,7 @@
         </select>
       </div>
 
-      <div class="col-md-5">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="skillId">
           <option [ngValue]="null">Select Skill</option>
           <option *ngFor="let skill of skills" [ngValue]="skill.id">
@@ -89,72 +76,60 @@
         </select>
       </div>
 
-      <div class="col-md-2">
-        <button class="btn btn-warning w-100" (click)="assignSkill()">
-          Assign
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-warning" (click)="assignSkill()">Assign</button>
       </div>
     </div>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Faculty List</h4>
-
-    <div class="row mb-3">
-      <div class="col-md-10">
-        <input
-          class="form-control"
-          placeholder="Search by skill"
-          [(ngModel)]="searchSkill"
-        />
-      </div>
-
-      <div class="col-md-2">
-        <button class="btn btn-dark w-100" (click)="searchFaculty()">
-          Search
-        </button>
-      </div>
+  <!-- Faculty List -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Faculty List</h3>
+      <span class="record-count">{{ faculties.length }} records</span>
     </div>
 
-    <table class="table table-bordered table-striped mt-3">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Skills</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div class="search-bar">
+      <input
+        class="form-control"
+        placeholder="Search by skill..."
+        [(ngModel)]="searchSkill"
+      />
+      <button class="btn btn-dark" (click)="searchFaculty()">Search</button>
+    </div>
 
-      <tbody>
-        <tr *ngFor="let faculty of faculties">
-          <td>{{ faculty.id }}</td>
-          <td>{{ faculty.name }}</td>
-          <td>{{ faculty.email }}</td>
-          <td>
-            <span
-              class="badge bg-info me-1"
-              *ngFor="let skill of faculty.skills">
-              {{ skill.name }}
-            </span>
-          </td>
-          <td>
-            <button
-              class="btn btn-sm btn-warning me-2"
-              (click)="editFaculty(faculty)">
-              Edit
-            </button>
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Skills</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteFaculty(faculty.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let faculty of faculties">
+            <td>{{ faculty.id }}</td>
+            <td><strong>{{ faculty.name }}</strong></td>
+            <td>{{ faculty.email }}</td>
+            <td>
+              <span
+                class="skill-tag"
+                *ngFor="let skill of faculty.skills">
+                {{ skill.name }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button class="btn btn-sm btn-outline-primary" (click)="editFaculty(faculty)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteFaculty(faculty.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

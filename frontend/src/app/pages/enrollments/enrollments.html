@@ -1,21 +1,18 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="message" class="alert alert-success">
-    {{ message }}
-  </div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <!-- Enroll Form -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Enroll Student</h3>
+    </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>Enroll Student</h4>
-
-    <div class="row">
-
-      <div class="col-md-5 mb-3">
+    <div class="form-row">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="student_id">
           <option [ngValue]="null">Select Student</option>
           <option *ngFor="let student of students" [ngValue]="student.id">
@@ -24,7 +21,7 @@
         </select>
       </div>
 
-      <div class="col-md-5 mb-3">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="program_id">
           <option [ngValue]="null">Select Program</option>
           <option *ngFor="let program of programs" [ngValue]="program.id">
@@ -33,45 +30,44 @@
         </select>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <button class="btn btn-primary w-100" (click)="enrollStudent()">
-          Enroll
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-primary" (click)="enrollStudent()">Enroll</button>
       </div>
-
     </div>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Enrollment List</h4>
+  <!-- Enrollment List -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Enrollment List</h3>
+      <span class="record-count">{{ enrollments.length }} records</span>
+    </div>
 
-    <table class="table table-bordered table-striped mt-3">
-      <thead>
-        <tr>
-          <th>Enrollment ID</th>
-          <th>Student</th>
-          <th>Program ID</th>
-          <th>Course</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Enrollment ID</th>
+            <th>Student</th>
+            <th>Program ID</th>
+            <th>Course</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let enrollment of enrollments">
-          <td>{{ enrollment.id }}</td>
-          <td>{{ enrollment.student }}</td>
-          <td>{{ enrollment.program_id }}</td>
-          <td>{{ enrollment.course }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteEnrollment(enrollment.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let enrollment of enrollments">
+            <td>{{ enrollment.id }}</td>
+            <td><strong>{{ enrollment.student }}</strong></td>
+            <td>{{ enrollment.program_id }}</td>
+            <td>{{ enrollment.course }}</td>
+            <td class="actions-cell">
+              <button class="btn btn-sm btn-danger" (click)="deleteEnrollment(enrollment.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

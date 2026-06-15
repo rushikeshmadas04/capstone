@@ -1,21 +1,21 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="message" class="alert alert-success">
-    {{ message }}
-  </div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <!-- Form Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">{{ editingStudentId ? 'Update Student' : 'Add Student' }}</h3>
+      <button *ngIf="editingStudentId" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+        Cancel Edit
+      </button>
+    </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>{{ editingStudentId ? 'Update Student' : 'Add Student' }}</h4>
-
-    <div class="row">
-
-      <div class="col-md-6 mb-3">
+    <div class="form-row">
+      <div class="form-field form-field--lg">
         <input
           class="form-control"
           placeholder="Registered Participant Email"
@@ -24,7 +24,7 @@
         />
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="course_id">
           <option [ngValue]="null">Select Course</option>
           <option *ngFor="let course of courses" [ngValue]="course.id">
@@ -33,67 +33,46 @@
         </select>
       </div>
 
-      <div class="col-md-2 mb-3" *ngIf="!editingStudentId">
-        <button class="btn btn-primary w-100" (click)="addStudent()">
-          Add
-        </button>
+      <div class="form-field form-field--action">
+        <button *ngIf="!editingStudentId" class="btn btn-primary" (click)="addStudent()">Add</button>
+        <button *ngIf="editingStudentId" class="btn btn-warning" (click)="updateStudent()">Update</button>
       </div>
-
-      <div class="col-md-2 mb-3" *ngIf="editingStudentId">
-        <button class="btn btn-warning w-100" (click)="updateStudent()">
-          Update
-        </button>
-      </div>
-
     </div>
-
-    <button
-      *ngIf="editingStudentId"
-      class="btn btn-secondary btn-sm"
-      (click)="cancelEdit()">
-      Cancel Edit
-    </button>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Student List</h4>
+  <!-- Table Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Student List</h3>
+      <span class="record-count">{{ students.length }} records</span>
+    </div>
 
-    <table class="table table-bordered table-striped mt-3">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Course</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let student of students">
-          <td>{{ student.id }}</td>
-          <td>{{ student.name }}</td>
-          <td>{{ student.email }}</td>
-          <td>
-            {{ student.course?.title || student.course_id || 'N/A' }}
-          </td>
-
-          <td>
-            <button
-              class="btn btn-sm btn-warning me-2"
-              (click)="editStudent(student)">
-              Edit
-            </button>
-
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteStudent(student.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let student of students">
+            <td>{{ student.id }}</td>
+            <td><strong>{{ student.name }}</strong></td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.course?.title || student.course_id || 'N/A' }}</td>
+            <td class="actions-cell">
+              <button class="btn btn-sm btn-outline-primary" (click)="editStudent(student)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteStudent(student.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

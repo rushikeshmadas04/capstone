@@ -1,20 +1,21 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="message" class="alert alert-success">
-    {{ message }}
-  </div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <!-- Form Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">{{ editingCourseId ? 'Update Course' : 'Add Course' }}</h3>
+      <button *ngIf="editingCourseId" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+        Cancel Edit
+      </button>
+    </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>{{ editingCourseId ? 'Update Course' : 'Add Course' }}</h4>
-
-    <div class="row">
-      <div class="col-md-3 mb-3">
+    <div class="form-row">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Course Code"
@@ -23,7 +24,7 @@
         />
       </div>
 
-      <div class="col-md-3 mb-3">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Course Title"
@@ -31,7 +32,7 @@
         />
       </div>
 
-      <div class="col-md-3 mb-3">
+      <div class="form-field">
         <input
           class="form-control"
           placeholder="Description"
@@ -39,74 +40,57 @@
         />
       </div>
 
-      <div class="col-md-2 mb-3">
+      <div class="form-field form-field--sm">
         <input
           type="number"
           class="form-control"
-          placeholder="Duration"
+          placeholder="Duration (days)"
           [(ngModel)]="duration_days"
         />
       </div>
 
-      <div class="col-md-1 mb-3" *ngIf="!editingCourseId">
-        <button class="btn btn-primary w-100" (click)="addCourse()">
-          Add
-        </button>
-      </div>
-
-      <div class="col-md-1 mb-3" *ngIf="editingCourseId">
-        <button class="btn btn-warning w-100" (click)="updateCourse()">
-          Update
-        </button>
+      <div class="form-field form-field--action">
+        <button *ngIf="!editingCourseId" class="btn btn-primary" (click)="addCourse()">Add</button>
+        <button *ngIf="editingCourseId" class="btn btn-warning" (click)="updateCourse()">Update</button>
       </div>
     </div>
-
-    <button
-      *ngIf="editingCourseId"
-      class="btn btn-secondary btn-sm"
-      (click)="cancelEdit()">
-      Cancel Edit
-    </button>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Course List</h4>
+  <!-- Table Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Course List</h3>
+      <span class="record-count">{{ courses.length }} records</span>
+    </div>
 
-    <table class="table table-bordered table-striped mt-3">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Code</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Duration Days</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Duration Days</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let course of courses">
-          <td>{{ course.id }}</td>
-          <td>{{ course.code }}</td>
-          <td>{{ course.title }}</td>
-          <td>{{ course.description }}</td>
-          <td>{{ course.duration_days }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-warning me-2"
-              (click)="editCourse(course)">
-              Edit
-            </button>
-
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteCourse(course.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let course of courses">
+            <td>{{ course.id }}</td>
+            <td><strong>{{ course.code }}</strong></td>
+            <td>{{ course.title }}</td>
+            <td>{{ course.description }}</td>
+            <td>{{ course.duration_days }}</td>
+            <td class="actions-cell">
+              <button class="btn btn-sm btn-outline-primary" (click)="editCourse(course)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteCourse(course.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

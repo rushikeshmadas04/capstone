@@ -1,21 +1,21 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="message" class="alert alert-success">
-    {{ message }}
-  </div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <!-- Program Form -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">{{ editingProgramId ? 'Update Training Program' : 'Create Training Program' }}</h3>
+      <button *ngIf="editingProgramId" class="btn btn-secondary btn-sm" (click)="cancelEdit()">
+        Cancel Edit
+      </button>
+    </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>{{ editingProgramId ? 'Update Training Program' : 'Create Training Program' }}</h4>
-
-    <div class="row">
-
-      <div class="col-md-2 mb-3">
+    <div class="form-row">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="course_id">
           <option [ngValue]="null">Select Course</option>
           <option *ngFor="let course of courses" [ngValue]="course.id">
@@ -24,7 +24,7 @@
         </select>
       </div>
 
-      <div class="col-md-2 mb-3">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="coordinator_id">
           <option [ngValue]="null">Select Coordinator</option>
           <option *ngFor="let coordinator of coordinators" [ngValue]="coordinator.id">
@@ -33,50 +33,37 @@
         </select>
       </div>
 
-      <div class="col-md-2 mb-3">
+      <div class="form-field">
         <input type="date" class="form-control" [(ngModel)]="start_date" />
       </div>
 
-      <div class="col-md-2 mb-3">
+      <div class="form-field">
         <input type="date" class="form-control" [(ngModel)]="end_date" />
       </div>
 
-      <div class="col-md-2 mb-3">
+      <div class="form-field">
         <input class="form-control" placeholder="Location" [(ngModel)]="location" />
       </div>
 
-      <div class="col-md-1 mb-3">
+      <div class="form-field form-field--sm">
         <input type="number" class="form-control" placeholder="Capacity" [(ngModel)]="capacity" />
       </div>
 
-      <div class="col-md-1 mb-3" *ngIf="!editingProgramId">
-        <button class="btn btn-warning w-100" (click)="addProgram()">
-          Add
-        </button>
+      <div class="form-field form-field--action">
+        <button *ngIf="!editingProgramId" class="btn btn-primary" (click)="addProgram()">Add</button>
+        <button *ngIf="editingProgramId" class="btn btn-warning" (click)="updateProgram()">Update</button>
       </div>
-
-      <div class="col-md-1 mb-3" *ngIf="editingProgramId">
-        <button class="btn btn-warning w-100" (click)="updateProgram()">
-          Update
-        </button>
-      </div>
-
     </div>
-
-    <button
-      *ngIf="editingProgramId"
-      class="btn btn-secondary btn-sm"
-      (click)="cancelEdit()">
-      Cancel Edit
-    </button>
   </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>Assign Faculty to Program</h4>
+  <!-- Faculty Assignment -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Assign Faculty to Program</h3>
+    </div>
 
-    <div class="row">
-
-      <div class="col-md-5 mb-3">
+    <div class="form-row">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="program_id">
           <option [ngValue]="null">Select Program</option>
           <option *ngFor="let program of programs" [ngValue]="program.id">
@@ -85,7 +72,7 @@
         </select>
       </div>
 
-      <div class="col-md-5 mb-3">
+      <div class="form-field">
         <select class="form-select" [(ngModel)]="faculty_id">
           <option [ngValue]="null">Select Faculty</option>
           <option *ngFor="let faculty of faculties" [ngValue]="faculty.id">
@@ -94,60 +81,63 @@
         </select>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <button class="btn btn-success w-100" (click)="assignFaculty()">
-          Assign
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-success" (click)="assignFaculty()">Assign</button>
       </div>
-
     </div>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Program List</h4>
+  <!-- Program List -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Program List</h3>
+      <span class="record-count">{{ programs.length }} records</span>
+    </div>
 
-    <table class="table table-bordered table-striped mt-3">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Course</th>
-          <th>Location</th>
-          <th>Capacity</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Course</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let program of programs">
-          <td>{{ program.id }}</td>
-          <td>{{ program.course }}</td>
-          <td>{{ program.location }}</td>
-          <td>{{ program.capacity }}</td>
-          <td>{{ program.status }}</td>
-          <td>
-            <button
-              class="btn btn-sm btn-warning me-2"
-              (click)="editProgram(program)">
-              Edit
-            </button>
-
-            <button
-              class="btn btn-sm btn-secondary me-2"
-              (click)="cancelProgram(program.id)"
-              [disabled]="program.status === 'CANCELLED'">
-              Cancel
-            </button>
-
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteProgram(program.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr *ngFor="let program of programs">
+            <td>{{ program.id }}</td>
+            <td><strong>{{ program.course }}</strong></td>
+            <td>{{ program.location }}</td>
+            <td>{{ program.capacity }}</td>
+            <td>
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'status-badge--active': program.status === 'ACTIVE',
+                  'status-badge--cancelled': program.status === 'CANCELLED',
+                  'status-badge--completed': program.status === 'COMPLETED'
+                }">
+                {{ program.status }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button class="btn btn-sm btn-outline-primary" (click)="editProgram(program)">Edit</button>
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="cancelProgram(program.id)"
+                [disabled]="program.status === 'CANCELLED'">
+                Cancel
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="deleteProgram(program.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

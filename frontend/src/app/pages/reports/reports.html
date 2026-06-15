@@ -1,64 +1,56 @@
 <app-navbar></app-navbar>
 
-<div class="container mt-4">
+<div class="page-content">
 
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>Dashboard Summary</h4>
+  <!-- Dashboard Summary -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Dashboard Summary</h3>
+    </div>
 
-    <div *ngIf="summary" class="row mt-3">
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Courses</b>
-          <h3>{{ summary.total_courses }}</h3>
-        </div>
+    <div *ngIf="summary" class="summary-grid">
+      <div class="summary-card">
+        <div class="stat-label">Courses</div>
+        <div class="stat-value">{{ summary.total_courses }}</div>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Faculty</b>
-          <h3>{{ summary.total_faculties }}</h3>
-        </div>
+      <div class="summary-card">
+        <div class="stat-label">Faculty</div>
+        <div class="stat-value">{{ summary.total_faculties }}</div>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Students</b>
-          <h3>{{ summary.total_students }}</h3>
-        </div>
+      <div class="summary-card">
+        <div class="stat-label">Students</div>
+        <div class="stat-value">{{ summary.total_students }}</div>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Programs</b>
-          <h3>{{ summary.total_programs }}</h3>
-        </div>
+      <div class="summary-card">
+        <div class="stat-label">Programs</div>
+        <div class="stat-value">{{ summary.total_programs }}</div>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Enrollments</b>
-          <h3>{{ summary.total_enrollments }}</h3>
-        </div>
+      <div class="summary-card">
+        <div class="stat-label">Enrollments</div>
+        <div class="stat-value">{{ summary.total_enrollments }}</div>
       </div>
 
-      <div class="col-md-2 mb-3">
-        <div class="card p-3 text-center">
-          <b>Feedbacks</b>
-          <h3>{{ summary.total_feedbacks }}</h3>
-        </div>
+      <div class="summary-card">
+        <div class="stat-label">Feedbacks</div>
+        <div class="stat-value">{{ summary.total_feedbacks }}</div>
       </div>
     </div>
   </div>
 
-  <div class="card p-4 shadow mb-4">
-    <h4>Program Reports</h4>
+  <!-- Program Reports -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Program Reports</h3>
+    </div>
 
-    <div class="row">
-      <div class="col-md-10 mb-3">
+    <div class="form-row" style="margin-bottom: var(--space-4)">
+      <div class="form-field">
         <input
           type="number"
           class="form-control"
@@ -66,55 +58,54 @@
           [(ngModel)]="programId"
         />
       </div>
-
-      <div class="col-md-2 mb-3">
-        <button class="btn btn-primary w-100" (click)="loadProgramReports()">
-          Load
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-primary" (click)="loadProgramReports()">Load</button>
+      </div>
+      <div class="form-field form-field--action">
+        <button class="btn btn-success" (click)="downloadCsv()">Download CSV</button>
       </div>
     </div>
 
-    <button class="btn btn-success mb-3" (click)="downloadCsv()">
-      Download CSV
-    </button>
+    <div class="reports-grid">
+      <div *ngIf="enrollmentReport" class="report-card report-card--blue">
+        <div class="report-label">Enrollment Report</div>
+        <div class="report-detail">Program {{ enrollmentReport.program_id }}</div>
+        <div class="report-detail">Course {{ enrollmentReport.course }}</div>
+        <div class="report-stat">{{ enrollmentReport.total_enrollments }} total enrollments</div>
+      </div>
 
-    <div *ngIf="enrollmentReport" class="alert alert-info">
-      <b>Enrollment Report:</b>
-      Program {{ enrollmentReport.program_id }},
-      Course {{ enrollmentReport.course }},
-      Total Enrollments {{ enrollmentReport.total_enrollments }}
-    </div>
+      <div *ngIf="attendanceReport" class="report-card report-card--amber">
+        <div class="report-label">Attendance Report</div>
+        <div class="report-detail">Present {{ attendanceReport.present_count }} / {{ attendanceReport.total_enrollments }}</div>
+        <div class="report-stat">{{ attendanceReport.attendance_percentage }}%</div>
+      </div>
 
-    <div *ngIf="attendanceReport" class="alert alert-warning">
-      <b>Attendance Report:</b>
-      Present {{ attendanceReport.present_count }} /
-      {{ attendanceReport.total_enrollments }},
-      Percentage {{ attendanceReport.attendance_percentage }}%
-    </div>
+      <div *ngIf="programSummary" class="report-card report-card--green">
+        <div class="report-label">Feedback Summary</div>
+        <div class="report-detail">{{ programSummary.total_feedbacks }} total feedbacks</div>
+        <div class="report-stat">Avg Rating: {{ programSummary.average_rating }}</div>
+      </div>
 
-    <div *ngIf="programSummary" class="alert alert-success">
-      <b>Feedback Summary:</b>
-      Total Feedbacks {{ programSummary.total_feedbacks }},
-      Average Rating {{ programSummary.average_rating }}
-    </div>
-
-    <div *ngIf="defaultersReport" class="alert alert-danger">
-      <b>Defaulters:</b>
-      Count {{ defaultersReport.defaulters_count }}
-
-      <ul class="mt-2">
-        <li *ngFor="let d of defaultersReport.defaulters">
-          {{ d.student_name }} - {{ d.email }}
-        </li>
-      </ul>
+      <div *ngIf="defaultersReport" class="report-card report-card--rose">
+        <div class="report-label">Defaulters</div>
+        <div class="report-stat">{{ defaultersReport.defaulters_count }} defaulters</div>
+        <ul class="defaulter-list">
+          <li *ngFor="let d of defaultersReport.defaulters">
+            {{ d.student_name }} - {{ d.email }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <div class="card p-4 shadow">
-    <h4>Faculty Performance</h4>
+  <!-- Faculty Performance -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">Faculty Performance</h3>
+    </div>
 
-    <div class="row">
-      <div class="col-md-10 mb-3">
+    <div class="form-row" style="margin-bottom: var(--space-4)">
+      <div class="form-field">
         <input
           type="number"
           class="form-control"
@@ -122,18 +113,15 @@
           [(ngModel)]="facultyId"
         />
       </div>
-
-      <div class="col-md-2 mb-3">
-        <button class="btn btn-dark w-100" (click)="loadFacultyReport()">
-          Load
-        </button>
+      <div class="form-field form-field--action">
+        <button class="btn btn-primary" (click)="loadFacultyReport()">Load</button>
       </div>
     </div>
 
-    <div *ngIf="facultyReport" class="alert alert-secondary">
-      <b>Faculty:</b> {{ facultyReport.faculty_name }} <br />
-      <b>Total Feedbacks:</b> {{ facultyReport.total_feedbacks }} <br />
-      <b>Average Rating:</b> {{ facultyReport.average_rating }}
+    <div *ngIf="facultyReport" class="report-card report-card--slate">
+      <div class="report-label">Faculty: {{ facultyReport.faculty_name }}</div>
+      <div class="report-detail">Total Feedbacks: {{ facultyReport.total_feedbacks }}</div>
+      <div class="report-stat">Average Rating: {{ facultyReport.average_rating }}</div>
     </div>
   </div>
 

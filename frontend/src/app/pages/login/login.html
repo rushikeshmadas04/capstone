@@ -1,111 +1,123 @@
-<div class="container mt-5">
-  <div class="card p-4 shadow">
+<div class="login-wrapper">
+  <div class="login-container">
 
-    <h2 class="text-center mb-4">
-      Feedback Management System
-    </h2>
-
-    <div *ngIf="errorMessage" class="alert alert-danger">
-      {{ errorMessage }}
+    <div class="login-brand">
+      <div class="brand-mark">FMS</div>
+      <h1 class="login-title">Feedback Management</h1>
+      <p class="login-tagline">Training &amp; Feedback Portal</p>
     </div>
 
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
+    <div class="login-card">
 
-    <div *ngIf="!showRegister">
-      <div class="mb-3">
-        <label class="form-label">Login As</label>
-        <select class="form-select" [(ngModel)]="role">
-          <option value="ADMIN">Admin</option>
-          <option value="COORDINATOR">Coordinator</option>
-          <option value="PARTICIPANT">Participant</option>
-        </select>
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          placeholder="Enter email"
-          [(ngModel)]="email"
-        />
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          placeholder="Enter password"
-          [(ngModel)]="password"
-        />
-      </div>
+      <!-- Login Form -->
+      <div *ngIf="!showRegister">
+        <div class="form-group">
+          <label class="form-label">Sign in as</label>
+          <select class="form-select" [(ngModel)]="role">
+            <option value="ADMIN">Administrator</option>
+            <option value="COORDINATOR">Coordinator</option>
+            <option value="PARTICIPANT">Participant</option>
+          </select>
+        </div>
 
-      <button class="btn btn-primary w-100" (click)="loginUser()">
-        Login
-      </button>
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            placeholder="you@example.com"
+            [(ngModel)]="email"
+          />
+        </div>
 
-      <p class="text-center mt-3">
-        New user?
-        <button class="btn btn-link p-0" (click)="showRegister = true">
-          Register here
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Enter your password"
+            [(ngModel)]="password"
+          />
+        </div>
+
+        <button class="btn btn-primary login-btn" (click)="loginUser()">
+          Sign In
         </button>
-      </p>
-    </div>
 
-    <div *ngIf="showRegister">
-      <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Enter name"
-          [(ngModel)]="registerName"
-        />
+        <div class="login-footer">
+          <span>New user?</span>
+          <button class="btn-link" (click)="showRegister = true">
+            Create an account
+          </button>
+        </div>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          placeholder="Enter email"
-          [(ngModel)]="registerEmail"
-        />
-      </div>
+      <!-- Register Form -->
+      <div *ngIf="showRegister">
+        <div class="form-group">
+          <label class="form-label">Full name</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter your name"
+            [(ngModel)]="registerName"
+          />
+        </div>
 
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          placeholder="Enter password"
-          [(ngModel)]="registerPassword"
-        />
-      </div>
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            placeholder="you@example.com"
+            [(ngModel)]="registerEmail"
+          />
+        </div>
 
-      <div class="mb-3">
-        <label class="form-label">Role</label>
-        <select class="form-select" [(ngModel)]="registerRole">
-          <option value="ADMIN">Admin</option>
-          <option value="COORDINATOR">Coordinator</option>
-          <option value="PARTICIPANT">Participant</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="Choose a password"
+            [(ngModel)]="registerPassword"
+          />
+        </div>
 
-      <button class="btn btn-success w-100" (click)="registerUser()">
-        Register
-      </button>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select class="form-select" [(ngModel)]="registerRole">
+            <option value="ADMIN">Administrator</option>
+            <option value="COORDINATOR">Coordinator</option>
+            <option value="PARTICIPANT">Participant</option>
+          </select>
+        </div>
 
-      <p class="text-center mt-3">
-        Already registered?
-        <button class="btn btn-link p-0" (click)="showRegister = false">
-          Login here
+        <button class="btn btn-primary login-btn" (click)="registerUser()">
+          Create Account
         </button>
-      </p>
+
+        <div class="login-footer">
+          <span>Already registered?</span>
+          <button class="btn-link" (click)="showRegister = false">
+            Sign in
+          </button>
+        </div>
+      </div>
+
     </div>
+
+    <p class="login-copyright">
+      &copy; 2026 Feedback Management System
+    </p>
 
   </div>
 </div>

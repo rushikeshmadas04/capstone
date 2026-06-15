@@ -1,0 +1,110 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+
+  <div *ngIf="message" class="alert alert-success">
+    {{ message }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="card p-4 shadow mb-4">
+    <h4>Submit Feedback</h4>
+
+    <div class="row">
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">My Enrollment</label>
+        <select
+          class="form-select"
+          [(ngModel)]="enrollment_id"
+          (change)="onEnrollmentChange()">
+
+          <option [ngValue]="null">Select Enrollment</option>
+
+          <option
+            *ngFor="let enrollment of myEnrollments"
+            [ngValue]="enrollment.id">
+            {{ enrollment.course }} - Enrollment ID {{ enrollment.id }}
+          </option>
+
+        </select>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Faculty</label>
+        <select
+          class="form-select"
+          [(ngModel)]="faculty_id">
+
+          <option [ngValue]="null">Select Faculty</option>
+
+          <option
+            *ngFor="let faculty of selectedEnrollment?.faculties"
+            [ngValue]="faculty.id">
+            {{ faculty.name }}
+          </option>
+
+        </select>
+      </div>
+
+      <div class="col-md-2 mb-3">
+        <label class="form-label">Rating</label>
+        <input
+          type="number"
+          min="1"
+          max="5"
+          class="form-control"
+          placeholder="1-5"
+          [(ngModel)]="rating"
+        />
+      </div>
+
+      <div class="col-md-2 mb-3">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-primary w-100" (click)="submitFeedback()">
+          Submit
+        </button>
+      </div>
+
+      <div class="col-md-12 mb-3">
+        <label class="form-label">Comments</label>
+        <textarea
+          class="form-control"
+          placeholder="Write your comments"
+          [(ngModel)]="comments">
+        </textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card p-4 shadow">
+    <h4>Feedback List</h4>
+
+    <table class="table table-bordered table-striped mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Enrollment ID</th>
+          <th>Faculty ID</th>
+          <th>Rating</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let feedback of feedbackList">
+          <td>{{ feedback.id }}</td>
+          <td>{{ feedback.enrollment_id }}</td>
+          <td>{{ feedback.faculty_id }}</td>
+          <td>{{ feedback.rating }}</td>
+          <td>{{ feedback.comments }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,111 @@
+<div class="container mt-5">
+  <div class="card p-4 shadow">
+
+    <h2 class="text-center mb-4">
+      Feedback Management System
+    </h2>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="!showRegister">
+      <div class="mb-3">
+        <label class="form-label">Login As</label>
+        <select class="form-select" [(ngModel)]="role">
+          <option value="ADMIN">Admin</option>
+          <option value="COORDINATOR">Coordinator</option>
+          <option value="PARTICIPANT">Participant</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Enter email"
+          [(ngModel)]="email"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Enter password"
+          [(ngModel)]="password"
+        />
+      </div>
+
+      <button class="btn btn-primary w-100" (click)="loginUser()">
+        Login
+      </button>
+
+      <p class="text-center mt-3">
+        New user?
+        <button class="btn btn-link p-0" (click)="showRegister = true">
+          Register here
+        </button>
+      </p>
+    </div>
+
+    <div *ngIf="showRegister">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter name"
+          [(ngModel)]="registerName"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Enter email"
+          [(ngModel)]="registerEmail"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Enter password"
+          [(ngModel)]="registerPassword"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Role</label>
+        <select class="form-select" [(ngModel)]="registerRole">
+          <option value="ADMIN">Admin</option>
+          <option value="COORDINATOR">Coordinator</option>
+          <option value="PARTICIPANT">Participant</option>
+        </select>
+      </div>
+
+      <button class="btn btn-success w-100" (click)="registerUser()">
+        Register
+      </button>
+
+      <p class="text-center mt-3">
+        Already registered?
+        <button class="btn btn-link p-0" (click)="showRegister = false">
+          Login here
+        </button>
+      </p>
+    </div>
+
+  </div>
+</div>

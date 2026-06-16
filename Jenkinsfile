@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+        DOCKER_COMPOSE_FILE = 'docker compose.yml'
     }
 
     stages {
@@ -32,13 +32,13 @@ pipeline {
 
         stage('Stop Old Containers') {
             steps {
-                sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans || true'
+                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans || true'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
+                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
             }
         }
 
@@ -59,7 +59,7 @@ pipeline {
         }
         failure {
             echo 'Deployment failed!'
-            sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} logs'
+            sh 'docker compose -f ${DOCKER_COMPOSE_FILE} logs'
         }
     }
 }

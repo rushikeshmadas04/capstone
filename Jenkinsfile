@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'docker compose.yml'
+        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -16,7 +17,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'docker build -t feedback-backend:${BUILD_NUMBER} .'
-                    sh 'docker build -t feedback-backend:latest .'
+                    sh 'docker tag feedback-backend:${BUILD_NUMBER} feedback-backend:latest'
                 }
             }
         }
@@ -25,28 +26,28 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'docker build -t feedback-frontend:${BUILD_NUMBER} .'
-                    sh 'docker build -t feedback-frontend:latest .'
+                    sh 'docker tag feedback-frontend:${BUILD_NUMBER} feedback-frontend:latest'
                 }
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down --remove-orphans || true'
+                sh 'docker compose down --remove-orphans || true'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
+                sh 'docker compose up -d --build'
             }
         }
 
         stage('Health Check') {
             steps {
                 sh '''
-                    sleep 10
-                    curl -f http://localhost:5000/ || exit 1
+                    sleep 15
+                    curl -f http://localhost:5000/health || exit 1
                     curl -f http://localhost:80/ || exit 1
                 '''
             }
@@ -54,12 +55,14 @@ pipeline {
     }
 
     post {
+
         success {
             echo 'Deployment successful!'
         }
+
         failure {
-            echo 'Deployment failed!'
-            sh 'docker compose -f ${DOCKER_COMPOSE_FILE} logs'
+            echo 'Deployment failed! Showing logs...'
+            sh 'docker compose logs'
         }
     }
 }

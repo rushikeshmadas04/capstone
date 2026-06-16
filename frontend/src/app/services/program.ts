@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Program {
-  private apiUrl = 'http://127.0.0.1:5000/api/programs';
+  private apiUrl = environment.apiUrl + '/programs';
+  private coursesUrl = environment.apiUrl + '/courses';
+  private usersUrl = environment.apiUrl + '/users';
+  private facultiesUrl = environment.apiUrl + '/faculties';
 
   constructor(private http: HttpClient) {}
 
@@ -50,21 +54,21 @@ export class Program {
 
   getCourses(): Observable<any[]> {
     return this.http.get<any[]>(
-      'http://127.0.0.1:5000/api/courses/',
+      `${this.coursesUrl}/`,
       this.getHeaders()
     );
   }
 
   getCoordinators(): Observable<any[]> {
     return this.http.get<any[]>(
-      'http://127.0.0.1:5000/api/users/?role=COORDINATOR',
+      `${this.usersUrl}/?role=COORDINATOR`,
       this.getHeaders()
     );
   }
 
   getFaculties(): Observable<any[]> {
     return this.http.get<any[]>(
-      'http://127.0.0.1:5000/api/faculties/',
+      `${this.facultiesUrl}/`,
       this.getHeaders()
     );
   }

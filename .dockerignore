@@ -1,0 +1,16 @@
+node_modules
+dist
+.angular
+.git
+*.md
+.vscode
+.idea
+__pycache__
+*.pyc
+.venv
+.env
+instance
+.ruff_cache
+.coverage
+.mypy_cache
+.pytest_cache

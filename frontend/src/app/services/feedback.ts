@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Feedback {
-  private apiUrl = 'http://127.0.0.1:5000/api/feedbacks';
+  private apiUrl = environment.apiUrl + '/feedbacks';
+  private enrollmentsUrl = environment.apiUrl + '/enrollments';
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +38,7 @@ export class Feedback {
 
   getMyEnrollments(): Observable<any> {
   return this.http.get(
-    'http://127.0.0.1:5000/api/enrollments/my',
+    `${this.enrollmentsUrl}/my`,
     this.getHeaders()
   );
 }

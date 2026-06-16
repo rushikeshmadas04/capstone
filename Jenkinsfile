@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+        BACKEND_IMAGE = 'feedback-backend'
+        FRONTEND_IMAGE = 'feedback-frontend'
     }
 
     stages {
@@ -16,8 +17,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    sh 'docker build -t feedback-backend:${BUILD_NUMBER} .'
-                    sh 'docker tag feedback-backend:${BUILD_NUMBER} feedback-backend:latest'
+                    sh 'docker build -t feedback-backend:latest .'
                 }
             }
         }
@@ -25,21 +25,35 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'docker build -t feedback-frontend:${BUILD_NUMBER} .'
-                    sh 'docker tag feedback-frontend:${BUILD_NUMBER} feedback-frontend:latest'
+                    sh 'docker build -t feedback-frontend:latest .'
                 }
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                sh 'docker compose down --remove-orphans || true'
+                sh '''
+                    docker stop feedback-backend || true
+                    docker stop feedback-frontend || true
+                    docker rm feedback-backend || true
+                    docker rm feedback-frontend || true
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker compose up -d --build'
+                sh '''
+                    docker run -d \
+                        --name feedback-backend \
+                        -p 5000:5000 \
+                        feedback-backend:latest
+
+                    docker run -d \
+                        --name feedback-frontend \
+                        -p 80:80 \
+                        feedback-frontend:latest
+                '''
             }
         }
 
@@ -47,7 +61,7 @@ pipeline {
             steps {
                 sh '''
                     sleep 15
-                    curl -f http://localhost:5000/health || exit 1
+                    curl -f http://localhost:5000/ || exit 1
                     curl -f http://localhost:80/ || exit 1
                 '''
             }
@@ -62,7 +76,10 @@ pipeline {
 
         failure {
             echo 'Deployment failed! Showing logs...'
-            sh 'docker compose logs'
+            sh '''
+                docker logs feedback-backend || true
+                docker logs feedback-frontend || true
+            '''
         }
     }
 }
